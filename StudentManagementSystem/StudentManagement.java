@@ -25,8 +25,9 @@ public class StudentManagement {
             System.out.println("3. View student at top");
             System.out.println("4. Check stack is empty");
             System.out.println("5. Search student by ID");
-            System.out.println("6. Show all students");
-            System.out.println("7. Exit");
+            System.out.println("6. Show all students after 1st sort");
+            System.out.println("7. Show all students after 2st sort");
+            System.out.println("8. Exit");
 
             int choice = scanner.nextInt();
             scanner.nextLine(); // Đọc dòng mới
@@ -64,6 +65,9 @@ public class StudentManagement {
                     studentStack.displayAll();
                     break;
                 case 7:
+                    studentStack.displayAllSortedByScore(); // Call the new method
+                    break;
+                case 8:
                     System.out.println("Exit program.");
                     return; // Thoát khỏi phương thức
                 default:

@@ -103,4 +103,32 @@ public class StudentStack {
         System.out.println("Students sorted by score.");
     }
 
+    // Insertion Sort by score
+    public void insertionSortByScore() {
+        if (isEmpty()) {
+            System.out.println("Stack is empty, cannot sort.");
+            return;
+        }
+
+        for (int i = 1; i <= top; i++) {
+            Student key = stackArray[i];
+            int j = i - 1;
+
+            // Move elements of stackArray[0..i-1], that are greater than key,
+            // to one position ahead of their current position
+            while (j >= 0 && stackArray[j].getScore() < key.getScore()) {
+                stackArray[j + 1] = stackArray[j];
+                j = j - 1;
+            }
+            stackArray[j + 1] = key;
+        }
+        System.out.println("Students sorted by score using Insertion Sort.");
+    }
+
+    // Method to display all students sorted by score
+    public void displayAllSortedByScore() {
+        insertionSortByScore(); // Sort the students first
+        displayAll(); // Display the sorted list
+    }
+
 }
