@@ -90,6 +90,7 @@ public class StudentStack {
             return;
         }
 
+        long startTime = System.nanoTime(); // Ghi lại thời gian bắt đầu
         for (int i = 0; i < top; i++) {
             for (int j = 0; j < top - i; j++) {
                 if (stackArray[j].getScore() > stackArray[j + 1].getScore()) {
@@ -100,35 +101,87 @@ public class StudentStack {
                 }
             }
         }
-        System.out.println("Students sorted by score.");
+        long endTime = System.nanoTime(); // Ghi lại thời gian kết thúc
+        long duration = endTime - startTime; // Tính thời gian thực hiện
+        System.out.println("Students sorted by score using Bubble Sort.");
+        System.out.println("Time taken for sorting: " + duration + " nanoseconds.");
     }
 
-    // Insertion Sort by score
-    public void insertionSortByScore() {
+    // Merge Sort by score
+    public void mergeSortByScore() {
         if (isEmpty()) {
             System.out.println("Stack is empty, cannot sort.");
             return;
         }
+        long startTime = System.nanoTime(); // Ghi lại thời gian bắt đầu
+        mergeSort(0, top);
+        long endTime = System.nanoTime(); // Ghi lại thời gian kết thúc
+        long duration = endTime - startTime; // Tính thời gian thực hiện
+        System.out.println("Students sorted by score using Merge Sort.");
+        System.out.println("Time taken for sorting: " + duration + " nanoseconds.");
+    }
 
-        for (int i = 1; i <= top; i++) {
-            Student key = stackArray[i];
-            int j = i - 1;
+    private void mergeSort(int left, int right) {
+        if (left < right) {
+            int middle = (left + right) / 2;
 
-            // Move elements of stackArray[0..i-1], that are greater than key,
-            // to one position ahead of their current position
-            while (j >= 0 && stackArray[j].getScore() < key.getScore()) {
-                stackArray[j + 1] = stackArray[j];
-                j = j - 1;
-            }
-            stackArray[j + 1] = key;
+            // Gọi đệ quy để chia
+            mergeSort(left, middle);
+            mergeSort(middle + 1, right);
+
+            // Hợp nhất các mảng đã sắp xếp
+            merge(left, middle, right);
         }
-        System.out.println("Students sorted by score using Insertion Sort.");
     }
 
-    // Method to display all students sorted by score
+    private void merge(int left, int middle, int right) {
+        int n1 = middle - left + 1;
+        int n2 = right - middle;
+
+        Student[] leftArray = new Student[n1];
+        Student[] rightArray = new Student[n2];
+
+        // Sao chép dữ liệu vào các mảng tạm
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = stackArray[left + i];
+        }
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = stackArray[middle + 1 + j];
+        }
+
+        // Hợp nhất các mảng tạm
+        int i = 0, j = 0;
+        int k = left;
+        while (i < n1 && j < n2) {
+            if (leftArray[i].getScore() <= rightArray[j].getScore()) {
+                stackArray[k] = leftArray[i];
+                i++;
+            } else {
+                stackArray[k] = rightArray[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Sao chép các phần tử còn lại
+        while (i < n1) {
+            stackArray[k] = leftArray[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+            stackArray[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
+
+    // Phương thức để hiển thị tất cả sinh viên đã sắp xếp theo điểm
     public void displayAllSortedByScore() {
-        insertionSortByScore(); // Sort the students first
-        displayAll(); // Display the sorted list
+        mergeSortByScore(); // Sắp xếp sinh viên trước
+        displayAll(); // Hiển thị danh sách đã sắp xếp
     }
-
 }
+
+
