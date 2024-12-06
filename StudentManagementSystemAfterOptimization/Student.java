@@ -25,14 +25,14 @@ public class Student {
 
     public String getRanking() {
         if (score < 5.0) return "Fail";
-        else if (score < 6.5) return "Medium";
-        else if (score < 7.5) return "Good";
-        else if (score < 9.0) return "Very Good";
-        else return "Excellent";
+        if (score < 6.5) return "Medium";
+        if (score < 7.5) return "Good";
+        if (score < 9.0) return "Very Good";
+        return "Excellent";
     }
 
     @Override
     public String toString() {
-        return "ID: " + id + ", Full Name: " + name + ", Score: " + score + ", Ranking: " + getRanking();
+        return String.format("ID: %s, Name: %s, Score: %.1f, Ranking: %s", id, name, score, getRanking());
     }
 }

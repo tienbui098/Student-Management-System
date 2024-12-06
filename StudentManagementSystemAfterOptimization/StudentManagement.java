@@ -3,81 +3,71 @@ package org.StudentManagementSystemAfterOptimization;
 import java.util.Scanner;
 
 public class StudentManagement {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
+    private StudentService studentService;
+
+    public StudentManagement() {
         StudentStack studentStack = new StudentStack();
-        showMenu(scanner, studentStack);
-        scanner.close();
+        studentService = new StudentService(studentStack);
     }
 
-    private static void showMenu(Scanner scanner, StudentStack studentStack) {
-        while (true) {
-            System.out.println("\nSelect an action:");
-            System.out.println("1. Add student");
-            System.out.println("2. Get student");
-            System.out.println("3. View student at top");
-            System.out.println("4. Check stack is empty");
-            System.out.println("5. Search student by ID");
-            System.out.println("6. Show all students");
-            System.out.println("7. Exit");
+    public void displayMenu() {
+        System.out.println("1. Add Student");
+        System.out.println("2. Display All Students");
+        System.out.println("3. Search Student by ID");
+        System.out.println("4. Remove Student");
+        System.out.println("5. Exit");
+    }
 
+    public void run() {
+        while (true) {
+            displayMenu();
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Đọc dòng mới
+            scanner.nextLine(); // Clear the buffer
 
             switch (choice) {
                 case 1:
-                    addStudent(scanner, studentStack);
+                    addStudent();
                     break;
                 case 2:
-                    studentStack.pop();
+                    studentService.displayAllStudents();
                     break;
                 case 3:
-                    Student topStudent = studentStack.peek();
-                    if (topStudent != null) {
-                        System.out.println("Student at the top of the stack: " + topStudent);
-                    }
+                    searchStudent();
                     break;
                 case 4:
-                    System.out.println(studentStack.isEmpty() ? "Empty stack." : "Stack is not empty.");
+                    studentService.removeStudent();
                     break;
                 case 5:
-                    searchStudent(scanner, studentStack);
-                    break;
-                case 6:
-                    studentStack.displayAll();
-                    break;
-                case 7:
-                    System.out.println("Exit program.");
+                    System.out.println("Exiting...");
                     return;
                 default:
-                    System.out.println("Invalid selection. Please select again.");
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
     }
 
-    private static void addStudent(Scanner scanner, StudentStack studentStack) {
-        System.out.print("Enter student code: ");
+    private void addStudent() {
+        System.out.print("Enter Student ID: ");
         String id = scanner.nextLine();
-        if (studentStack.search(id) != null) {
-            System.out.println("Student code already exists. Please enter a different student code.");
-            return;
-        }
-        System.out.print("Enter student's full name: ");
+        System.out.print("Enter Student Name: ");
         String name = scanner.nextLine();
-        System.out.print("Enter student scores: ");
+        System.out.print("Enter Student Score: ");
         double score = scanner.nextDouble();
-        scanner.nextLine(); // Đọc dòng mới
-        studentStack.push(new Student(id, name, score));
+        scanner.nextLine(); // Clear the buffer
+
+        Student student = new Student(id, name, score);
+        studentService.addStudent(student);
     }
 
-    private static void searchStudent(Scanner scanner, StudentStack studentStack) {
-        System.out.print("Enter the student code you are looking for: ");
-        String searchId = scanner.nextLine();
-        Student foundStudent = studentStack.search(searchId);
-        if (foundStudent != null) {
-            System.out.println("Found student: " + foundStudent);
-        } else {
-            System.out.println("No student found with code: " + searchId);
-        }
+    private void searchStudent() {
+        System.out.print("Enter Student ID to search: ");
+        String id = scanner.nextLine();
+        studentService.searchStudent(id);
+    }
+
+    public static void main(String[] args) {
+        StudentManagement management = new StudentManagement();
+        management.run();
     }
 }
